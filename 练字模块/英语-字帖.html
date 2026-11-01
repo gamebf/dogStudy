@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>三年级上册 · 英语字帖</title>
+<style>
+
+@page { size: A4; margin: 12mm; }
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; }
+body { font-family: "KaiTi","STKaiti","楷体","SimSun",serif; color:#222; }
+.sheet { width:186mm; margin:0 auto; }
+h1 { text-align:center; font-size:20px; margin:3px 0 0; }
+.sub { text-align:center; color:#888; font-size:11px; margin-bottom:4px; }
+.controls { text-align:center; margin:4px 0 8px; font-size:15px; }
+.controls button { font-size:15px; padding:4px 14px; margin:0 4px; cursor:pointer; }
+.controls input { width:48px; font-size:15px; text-align:center; }
+.day-title { font-size:17px; border-bottom:2px solid; padding-bottom:3px; margin:4px 0 8px; display:flex; justify-content:space-between; align-items:baseline; }
+.day-title .meta { font-size:12px; color:#666; font-weight:normal; }
+.label { font-size:13px; color:#555; margin:10px 0 3px; }
+.ref { font-size:22px; color:#c33; margin:0 0 3px; }
+.ref-sent { font-size:19px; color:#c33; margin:0 0 3px; }
+@media print { .no-print { display:none; } }
+
+.day-title { border-color: #36c; }
+
+.four { width:46px; height:58px; margin:2px; position:relative; display:flex; align-items:flex-end; justify-content:center; font-family:"Comic Sans MS","Segoe Print",sans-serif; font-size:34px; padding-bottom:7px; }
+.four .l { position:absolute; left:0; right:0; height:0; }
+.four .l1 { top:18%; border-top:1px solid #f66; }
+.four .l2 { top:46%; border-top:1px dashed #bbb; }
+.four .l3 { top:78%; border-top:1px solid #f66; }
+.four .l4 { top:96%; border-top:1px dashed #bbb; }
+.four .c { position:relative; z-index:1; line-height:1; }
+.four.fan .c { color:#d00; }
+.four.trace .c { color:#d0d0d0; }
+.four.blank .c { color:transparent; }
+.space { width:14px; }
+.row { display:flex; flex-wrap:wrap; align-items:flex-end; margin:0 0 8px 0; }
+.row.free { justify-content:center; }
+
+</style>
+</head>
+<body>
+<div class="sheet">
+<h1>三年级上册 · 英语字帖</h1>
+<div class="sub">牛津上海版 3A · 单词书写（四线三格，每日 1 页）</div>
+<div class="no-print controls">
+  <button onclick="goto(0)">◀ 上一天</button>
+  <span>第 <input id="dayInp" type="number" min="1" max="60" value="1" onchange="jump()"> / 60 天</span>
+  <button onclick="goto(1)">下一天 ▶</button>
+  <button onclick="window.print()">🖨 打印本页</button>
+</div>
+<div id="app"></div>
+</div>
+<script>
+
+var DAYS = [{"day":1,"review":false,"kind":"words","words":["hello","hi","good"]},{"day":2,"review":false,"kind":"words","words":["morning","afternoon","name"]},{"day":3,"review":false,"kind":"words","words":["old","one","two"]},{"day":4,"review":false,"kind":"words","words":["three","four","five"]},{"day":5,"review":false,"kind":"words","words":["six","seven","eight"]},{"day":6,"review":false,"kind":"words","words":["nine","ten","friend"]},{"day":7,"review":false,"kind":"words","words":["boy","girl","tall"]},{"day":8,"review":false,"kind":"words","words":["short","fat","thin"]},{"day":9,"review":false,"kind":"words","words":["big","small","family"]},{"day":10,"review":false,"kind":"words","words":["father","mother","brother"]},{"day":11,"review":false,"kind":"words","words":["sister","grandfather","grandmother"]},{"day":12,"review":false,"kind":"words","words":["me","hair","eye"]},{"day":13,"review":false,"kind":"words","words":["ear","nose","mouth"]},{"day":14,"review":false,"kind":"words","words":["school","classroom","library"]},{"day":15,"review":false,"kind":"words","words":["hall","playground","toilet"]},{"day":16,"review":false,"kind":"words","words":["office","shop","buy"]},{"day":17,"review":false,"kind":"words","words":["please","much","yuan"]},{"day":18,"review":false,"kind":"words","words":["park","boat","balloon"]},{"day":19,"review":false,"kind":"words","words":["kite","flower","tree"]},{"day":20,"review":false,"kind":"words","words":["insect","ant","bee"]},{"day":21,"review":false,"kind":"words","words":["butterfly","ladybird","fly"]},{"day":22,"review":false,"kind":"words","words":["farm","chick","hen"]},{"day":23,"review":false,"kind":"words","words":["duck","cow","pig"]},{"day":24,"review":false,"kind":"words","words":["sheep","horse","plant"]},{"day":25,"review":false,"kind":"words","words":["leaf","root","seed"]},{"day":26,"review":false,"kind":"words","words":["sun"]},{"day":27,"review":false,"kind":"sent","sent":"Hello! How are you?"},{"day":28,"review":false,"kind":"sent","sent":"I'm fine, thank you."},{"day":29,"review":false,"kind":"sent","sent":"What's your name?"},{"day":30,"review":false,"kind":"sent","sent":"My name's Alice."},{"day":31,"review":false,"kind":"sent","sent":"How old are you?"},{"day":32,"review":false,"kind":"sent","sent":"I'm nine years old."},{"day":33,"review":false,"kind":"sent","sent":"This is my friend."},{"day":34,"review":false,"kind":"sent","sent":"He is tall."},{"day":35,"review":false,"kind":"sent","sent":"She is thin."},{"day":36,"review":false,"kind":"sent","sent":"I have a big family."},{"day":37,"review":false,"kind":"sent","sent":"My eyes are big."},{"day":38,"review":false,"kind":"sent","sent":"This is my school."},{"day":39,"review":false,"kind":"sent","sent":"Can I help you?"},{"day":40,"review":false,"kind":"sent","sent":"How much is it?"},{"day":41,"review":false,"kind":"sent","sent":"I can see a boat in the park."},{"day":42,"review":false,"kind":"sent","sent":"What's this? It's an insect."},{"day":43,"review":false,"kind":"sent","sent":"I like plants."},{"day":44,"review":true,"kind":"review","words":["hello","hi","good"]},{"day":45,"review":true,"kind":"review","words":["morning","afternoon","name"]},{"day":46,"review":true,"kind":"review","words":["old","one","two"]},{"day":47,"review":true,"kind":"review","words":["three","four","five"]},{"day":48,"review":true,"kind":"review","words":["six","seven","eight"]},{"day":49,"review":true,"kind":"review","words":["nine","ten","friend"]},{"day":50,"review":true,"kind":"review","words":["boy","girl","tall"]},{"day":51,"review":true,"kind":"review","words":["short","fat","thin"]},{"day":52,"review":true,"kind":"review","words":["big","small","family"]},{"day":53,"review":true,"kind":"review","words":["father","mother","brother"]},{"day":54,"review":true,"kind":"review","words":["sister","grandfather","grandmother"]},{"day":55,"review":true,"kind":"review","words":["me","hair","eye"]},{"day":56,"review":true,"kind":"review","words":["ear","nose","mouth"]},{"day":57,"review":true,"kind":"review","words":["school","classroom","library"]},{"day":58,"review":true,"kind":"review","words":["hall","playground","toilet"]},{"day":59,"review":true,"kind":"review","words":["office","shop","buy"]},{"day":60,"review":true,"kind":"review","words":["please","much","yuan"]}];
+var cur = 0;
+var render = function enRender(day) {
+  function cell(txt, cls) {
+    return `<span class="four ${cls}"><span class="c">${txt}</span>` +
+      `<span class="l l1"></span><span class="l l2"></span><span class="l l3"></span><span class="l l4"></span></span>`;
+  }
+  let h = `<div class="day-title"><span>第 ${day.day} 天 · 英语${day.review ? '（复习）' : ''}</span><span class="meta">姓名：________　日期：____年__月__日</span></div>`;
+  if (day.kind === 'words' || day.kind === 'review') {
+    h += `<div class="label">◆ 单词（描红 + 临写）</div>`;
+    day.words.forEach(w => {
+      h += `<div class="ref">${w}</div><div class="row">`;
+      for (const ch of w) h += cell(ch, 'trace');
+      h += `<span class="space"></span>`;
+      for (const ch of w) h += cell('', 'blank');
+      h += `</div><div class="row">`;
+      for (const ch of w) h += cell('', 'blank');
+      h += `<span class="space"></span>`;
+      for (const ch of w) h += cell('', 'blank');
+      h += `</div>`;
+    });
+  } else if (day.kind === 'sent') {
+    h += `<div class="label">◆ 句型（照样子抄写）</div>`;
+    h += `<div class="ref">${day.sent}</div>`;
+    for (let r = 0; r < 2; r++) {
+      h += `<div class="row">`;
+      for (const ch of day.sent) {
+        if (ch === ' ') { h += `<span class="space"></span>`; continue; }
+        h += cell('', 'blank');
+      }
+      h += `</div>`;
+    }
+  }
+  h += `<div class="label">◆ 自由练习（空白四线三格）</div>`;
+  for (let r = 0; r < 4; r++) {
+    h += `<div class="row free">`;
+    for (let i = 0; i < 12; i++) h += cell('', 'blank');
+    h += `</div>`;
+  }
+  return h;
+};
+function show() {
+  document.getElementById('app').innerHTML = render(DAYS[cur]);
+  document.getElementById('dayInp').value = cur + 1;
+  
+}
+function goto(dir) { cur = Math.min(59, Math.max(0, cur + (dir ? 1 : -1))); show(); }
+function jump() { var v = parseInt(document.getElementById('dayInp').value, 10); if (!isNaN(v)) { cur = Math.min(59, Math.max(0, v - 1)); show(); } }
+show();
+</script>
+</body>
+</html>
